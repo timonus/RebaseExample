@@ -41,4 +41,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)showCatPicture:(id)sender
+{
+    NSString *urlString = [NSString stringWithFormat:@"http://placekitten.com/%zd/%zd", 200 + arc4random_uniform(100), 200 + arc4random_uniform(100)];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    __weak ViewController *weakSelf = self;
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        UIImage *image = [UIImage imageWithData:data];
+        if (!image) {
+            NSLog(@"Error Downloading Cat Pic!");
+        }
+        weakSelf.imageView.image = image;
+    }];
+}
+
 @end
